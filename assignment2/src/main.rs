@@ -3,22 +3,22 @@ use regex::Regex;
 use std::fs;
 
 struct Line {
-    min: i32,
-    max: i32,
+    min: usize,
+    max: usize,
     character: char,
     password: String,
 }
 
 fn main() {
     let in_range = |line: Line| {
-        let count = line.password.matches(line.character).count() as i32;
+        let count = line.password.matches(line.character).count();
         line.min <= count && count <= line.max
     };
 
     let in_position = |line: Line| {
         let passsword_chars = line.password.chars().collect::<Vec<char>>();
-        let is_first = passsword_chars[(line.min - 1) as usize] == line.character;
-        let is_second = passsword_chars[(line.max - 1) as usize] == line.character;
+        let is_first = passsword_chars[(line.min - 1)] == line.character;
+        let is_second = passsword_chars[(line.max - 1)] == line.character;
         is_first != is_second
     };
 
@@ -47,8 +47,8 @@ fn parse(row: &str) -> Line {
     }
     match RE.captures(&row) {
         Some(cap) => Line {
-            min: cap.name("min").unwrap().as_str().parse::<i32>().unwrap(),
-            max: cap.name("max").unwrap().as_str().parse::<i32>().unwrap(),
+            min: cap.name("min").unwrap().as_str().parse::<usize>().unwrap(),
+            max: cap.name("max").unwrap().as_str().parse::<usize>().unwrap(),
             character: cap.name("char").unwrap().as_str().chars().next().unwrap(),
             password: cap.name("password").unwrap().as_str().to_string(),
         },
